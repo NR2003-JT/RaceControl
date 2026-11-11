@@ -1,0 +1,32 @@
+# Running copy, builds, release staging
+/app/
+/bin/
+/beta/
+/release/
+# Design exports and scratch
+/art/
+/x
+/src/x
+# Local notes and helpers (personal)
+CLAUDE.md
+BUILD NOTES*.txt
+Resume RaceControl chat*.cmd
+indy q types.txt
+# Claude edit backups
+*.before-claude-*
+__pycache__/
+*.log
+# Visual Studio state (personal paths, chat history)
+.vs/
+**/.vs/
+*.suo
+*.user
+# Recordings and probe dumps from testing (the sim and probe scripts are kept)
+/test/traces/
+/test/*.log
+/test/*.csv
+/test/*.bin
+/src/x
+# Zips and builds
+*.zip
+*.exe
