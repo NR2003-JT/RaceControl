@@ -187,7 +187,7 @@ Stages
   Stage laps from a stage         Optional: the stage end laps come from a stage racing companion app (its
   racing companion app            stage racing settings and its log for this race) instead of the settings
   / Folder...                     above, so the stages match what that app shows. Folder... picks the app's
-                                  data folder if it is not found on its own; the line under the options
+                                  data folder (there is no default, and it is also where its series art comes from); the line under the options
                                   says what was found (or why not, for example its stage racing is off).
                                   Off, RaceControl runs the stages on its own. If that app also throws the stage caution,
                                   RaceControl's comes first (3/4 through the lap) and the other one lands
