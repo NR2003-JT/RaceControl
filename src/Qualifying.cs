@@ -67,6 +67,7 @@ namespace RaceControl
         public bool QualPace = true;                           // give the AI the game's qualifying speed bonus while out
         public double DnqSeconds = 90;                         // single car: a released car not out of its box by then = DNQ
         public bool MatchStockPace = true;                     // scale the written times to the game's own qualifying pace (order unchanged)
+        public double BoostPercent = 100;                      // strength of the qualifying bonus: 100 = the game's own formula, more = faster
         public double FuelPercent = 25;                        // qualifying fuel load (% of the tank) given at the start of a run; 0 = leave it
         readonly HashSet<int> dnq = new HashSet<int>();
 
@@ -314,10 +315,13 @@ namespace RaceControl
 
         // live timing for the overlay (MainForm draws it)
         public readonly QualTiming Timing = new QualTiming();
+        public IEnumerable<int> Field { get { return field; } }          // the cars in qualifying (for the telemetry)
+        public bool IndyFormat { get { return Mode == Format.IndyOval || Mode == Format.IndyRoad; } }
         public bool LiveOn { get; private set; }
         public string LiveHeader = "";
         public List<Tuple<int, int>> LiveBoard = new List<Tuple<int, int>>();   // slot, best ms - fastest first
         public int CarNumber(int c) { return m.I32(Driver0 + c * DriverSize + DriverNum); }
+        public bool HasMemory { get { return m != null; } }   // false until the first Tick hands it the game
         // single car: the cars on their run (release order) and the one the timing box follows by default
         // A car that has been called in is still in Active until it reaches pit road, but it is no
         // longer a timed runner. Do not let the timing box follow its in-lap.
@@ -530,7 +534,7 @@ namespace RaceControl
                 {
                     float co = m.F32(QpCoeffs[k]);
                     if (!(co >= 0f && co < 1f)) return;
-                    v = 1f + (r - 1f) * co;
+                    v = 1f + (r - 1f) * co * (float)(BoostPercent / 100.0);
                 }
                 m.W32(b + QpMults + k * 4, BitConverter.ToInt32(BitConverter.GetBytes(v), 0));
             }

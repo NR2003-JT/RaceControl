@@ -82,6 +82,14 @@ namespace RaceControl
                 throw new GameMemoryException(string.Format("write failed at 0x{0:X}", a));
         }
 
+        // n bytes in one read (a copy): for the telemetry, a car's driver inputs, position and velocity together
+        public byte[] Bytes(long a, int n)
+        {
+            var r = new byte[n]; IntPtr done;
+            if (!ReadProcessMemory(handle, new IntPtr(a), r, n, out done) || done.ToInt64() != n)
+                throw new GameMemoryException(string.Format("read failed at 0x{0:X}", a));
+            return r;
+        }
         public byte U8(long a) { return Read(a, 1)[0]; }
         public int U16(long a) { return BitConverter.ToUInt16(Read(a, 2), 0); }
         public int I32(long a) { return BitConverter.ToInt32(Read(a, 4), 0); }
@@ -99,6 +107,31 @@ namespace RaceControl
         public void W8(long a, byte v) { Write(a, new byte[] { v }); }
         public void W16(long a, int v) { Write(a, BitConverter.GetBytes((ushort)v)); }
         public void W32(long a, int v) { Write(a, BitConverter.GetBytes(v)); }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern bool VirtualProtectEx(IntPtr h, IntPtr addr, UIntPtr size, uint protect, out uint old);
+        [DllImport("kernel32.dll")]
+        static extern bool FlushInstructionCache(IntPtr h, IntPtr addr, UIntPtr size);
+
+        // n bytes of executable memory in the game (for a code cave); 0 when it could not be had
+        public long Alloc(int n)
+        {
+            IntPtr p = VirtualAllocEx(handle, IntPtr.Zero, new UIntPtr((uint)n), 0x3000, 0x40);   // commit+reserve, RWX
+            return p.ToInt64();
+        }
+
+        // writes over the game's code (made writable for the write, then put back) and flushes it
+        public void WriteCode(long a, byte[] data)
+        {
+            uint old;
+            bool prot = VirtualProtectEx(handle, new IntPtr(a), new UIntPtr((uint)data.Length), 0x40, out old);
+            try { Write(a, data); }
+            finally
+            {
+                if (prot) VirtualProtectEx(handle, new IntPtr(a), new UIntPtr((uint)data.Length), old, out old);
+                FlushInstructionCache(handle, new IntPtr(a), new UIntPtr((uint)data.Length));
+            }
+        }
 
         IntPtr stub;
 

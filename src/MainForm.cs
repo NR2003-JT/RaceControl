@@ -10,14 +10,14 @@ namespace RaceControl
 {
     public class MainForm : Form
     {
-        public const string Version = "3.3.11";   // 3.3.11: run Q + the player's race banner (penalty on your car, free pass / wave around and what to do, FOLLOW #N in the caution line; RaceEngine.PlayerCall.cs from the main tree without its new-core branches); 3.3.10 (run Q): a leader just past the pace car (15% of a lap) waits for it whatever the pace car state, and with the hold off the pace car goes at once and the chase holds the leader; cars side by side at the yellow (15 m) that come out the other way round on track (40 m, 3 s) keep the order on track; a car on pit road at the yellow gives up its spot like a wreck car (end of the line, behind its group in the lineup); 3.3.9 (run P): pace lap fit also places the first car against the pace car (a car between the pace car and the leader is then a pace lap down and goes around on its own); send-arounds/waves set one lap down on the pace car instead of minus one, give-ups set the fitted value instead of plus one; the game lead time read when the pace car starts waiting (0x406820), not while parked; 3.3.8 (run O): pace laps fitted to the line at flags 0-1 (each car's pace lap makes the game's own distance sum equal its real gap to the car it follows; from NR2003.exe 0x52B070/0x52B120/0x414380), in place of tail catch-up and the chase's pace laps for cars other than the leader; ini PaceLapFit=0 = 3.3.7; 3.3.7 (run N): pace car chase only over once the pace car has gone by the leader or come out in front of it (not while parked); tail catch-up not helped again while still closing in; 3.3.6 (run M): a pace car sent out behind the leader catches it (cars between it and the leader get its pace lap and crawl; also a leader just past at the first look); tail catch-up eases off at braking distance from the car in front, the clump behind with it, and is not helped again while still closing in; 3.3.5 (run L): caution line from the order at the yellow (stopped cars to the end); free pass at the first chance again; tail catch-up through flag 2 only when the spot is in front with the pace car not between; 3.3.4 (run K): untangling looser at the back (lapped or last quarter: 150 m, 3 s); 3.3.3 (run K): tail catch-up only while the pace car is on pit road; wave arounds and the free pass at one to go, checked again then, queued cars keep their spot in front; 3.3.2 (run J): tail catch-up (a pace lap less for cars far behind their car in the line until the field is packed); 3.3.1 (run I): caution line put in running order from the leader when the game cut it at the start/finish line; 3.3.0 (run H): pace car goes the moment the leader drives past it (the game makes it catch the leader from behind; held, the field crawled a lap); 3.2.9 (run G): leader speed from its velocity, stopped leader skipped, hold a lap at the crawl, no learning from slow leaders, PaceMatch off; 3.2.8 (run F): pace car speed matched to the leader (0x74B080); 3.2.7: release from the leader's speed, pace car held while parked, exit saved per track; 3.2.6 (run E): window floor 60%, crawl release long tracks only, no wait for a car between, learning guards; 3.2.5 (run D): pace car waits for a clear leader, narrower window and learning on short tracks; 3.2.4 (run C): clock, leader speed, target, hold limit, PaceFixes on
+        public const string Version = "3.3.12";   // 3.3.12: telemetry window (traces, scroll to zoom, TV strip, in-car wheel) + pace laps before the green (StartPaceLaps, RaceEngine.Start.cs); 3.3.11: run Q + the player's race banner (penalty on your car, free pass / wave around and what to do, FOLLOW #N in the caution line; RaceEngine.PlayerCall.cs from the main tree without its new-core branches); 3.3.10 (run Q): a leader just past the pace car (15% of a lap) waits for it whatever the pace car state, and with the hold off the pace car goes at once and the chase holds the leader; cars side by side at the yellow (15 m) that come out the other way round on track (40 m, 3 s) keep the order on track; a car on pit road at the yellow gives up its spot like a wreck car (end of the line, behind its group in the lineup); 3.3.9 (run P): pace lap fit also places the first car against the pace car (a car between the pace car and the leader is then a pace lap down and goes around on its own); send-arounds/waves set one lap down on the pace car instead of minus one, give-ups set the fitted value instead of plus one; the game lead time read when the pace car starts waiting (0x406820), not while parked; 3.3.8 (run O): pace laps fitted to the line at flags 0-1 (each car's pace lap makes the game's own distance sum equal its real gap to the car it follows; from NR2003.exe 0x52B070/0x52B120/0x414380), in place of tail catch-up and the chase's pace laps for cars other than the leader; ini PaceLapFit=0 = 3.3.7; 3.3.7 (run N): pace car chase only over once the pace car has gone by the leader or come out in front of it (not while parked); tail catch-up not helped again while still closing in; 3.3.6 (run M): a pace car sent out behind the leader catches it (cars between it and the leader get its pace lap and crawl; also a leader just past at the first look); tail catch-up eases off at braking distance from the car in front, the clump behind with it, and is not helped again while still closing in; 3.3.5 (run L): caution line from the order at the yellow (stopped cars to the end); free pass at the first chance again; tail catch-up through flag 2 only when the spot is in front with the pace car not between; 3.3.4 (run K): untangling looser at the back (lapped or last quarter: 150 m, 3 s); 3.3.3 (run K): tail catch-up only while the pace car is on pit road; wave arounds and the free pass at one to go, checked again then, queued cars keep their spot in front; 3.3.2 (run J): tail catch-up (a pace lap less for cars far behind their car in the line until the field is packed); 3.3.1 (run I): caution line put in running order from the leader when the game cut it at the start/finish line; 3.3.0 (run H): pace car goes the moment the leader drives past it (the game makes it catch the leader from behind; held, the field crawled a lap); 3.2.9 (run G): leader speed from its velocity, stopped leader skipped, hold a lap at the crawl, no learning from slow leaders, PaceMatch off; 3.2.8 (run F): pace car speed matched to the leader (0x74B080); 3.2.7: release from the leader's speed, pace car held while parked, exit saved per track; 3.2.6 (run E): window floor 60%, crawl release long tracks only, no wait for a car between, learning guards; 3.2.5 (run D): pace car waits for a clear leader, narrower window and learning on short tracks; 3.2.4 (run C): clock, leader speed, target, hold limit, PaceFixes on
 
         readonly Dictionary<string, CheckBox> checks = new Dictionary<string, CheckBox>();
         readonly Dictionary<string, string> settings = new Dictionary<string, string>();
         readonly ComboBox laneBox, stageCountBox, stageModeBox;
         readonly TextBox stageEndsBox;
         readonly Label stageInfo;
-        readonly NumericUpDown giveUpBox, frontRowsBox, coneBox;
+        readonly NumericUpDown giveUpBox, frontRowsBox, coneBox, startPaceBox;
         readonly Label laneLabel, status;
         readonly ListBox logBox;
         readonly Timer tick, slowTimer;
@@ -48,8 +48,18 @@ namespace RaceControl
         DateTime broadAt = DateTime.MinValue; string broadKey;
         ComboBox qualStyleBox;
         readonly Dictionary<int, float> rpmTop = new Dictionary<int, float>();   // the highest RPM seen per car (the bar's full scale)
-        readonly Dictionary<int, float> thrPeak = new Dictionary<int, float>();  // the highest throttle seen per car (= 100 %)
-        readonly Dictionary<int, float> brkPeak = new Dictionary<int, float>();  // the highest brake byte seen per car
+        // AI telemetry (Telemetry.cs): every qualifying car sampled ~30 times a game second while qualifying is live; the
+        // broadcast box's brake, the in-game strip and the telemetry window all read it
+        readonly TeleRecorder tele = new TeleRecorder();
+        // outside custom qualifying (races and the rest) the strip follows the car on TV: its own recorder, with a timing
+        // that never runs, so it keeps only the last few seconds and records no laps
+        readonly TeleRecorder tvTele = new TeleRecorder();
+        readonly QualTiming noTiming = new QualTiming();
+        TeleStripForm teleStrip, stripPlacing;
+        BoardLayout stripLayout = new BoardLayout();
+        DateTime stripAt = DateTime.MinValue;
+        TelemetryWindow teleWin;
+        bool wheelPatched; int wheelPid = -1;   // WheelAnim.cs: the in-car wheel patch is in this NR2003 process
         ComboBox qualLapUnitBox;
         int orderCar = -1, orderLapStart = -2; DateTime orderUntil = DateTime.MinValue;
         readonly Label[] stageLabels = new Label[3], stageUnits = new Label[3];
@@ -84,7 +94,7 @@ namespace RaceControl
         GroupBox qualNascarGroup, qualIndyGroup; Control qualPage; Label qualKoLabel, qualBreakLabel, qualMaxOutLabel, qualIndyLapsLabel, qualIndyHint;
         readonly List<Control> qualIndyRoadCtls = new List<Control>();
         readonly NumericUpDown qualLapsBox, qualBreakBox, qualDnqBox, qualReleaseVal, qualMaxOutBox;
-        NumericUpDown qualFuelBox;
+        NumericUpDown qualFuelBox, qualBoostBox;
         // Indy oval re-qualifying lanes, the field size (DNQs), the player's lane buttons
         CheckBox qualReQualBox, qualWaveOffBox; NumericUpDown qualReQualMin, qualReQualRuns, qualStartersBox; ComboBox qualStartersUnit; CheckBox qualScratchBox;
         readonly List<Control> qualOvalCtls = new List<Control>();
@@ -310,6 +320,15 @@ namespace RaceControl
             Check(g, "GhostWhilePacing", "No contact while pacing", 200, 174, false,
                 "Cars behind the pace car pass through each other (as Better Cautions' 'disable caution collisions').\n" +
                 "Contact comes back per car once it is clear of the others, instead of for everyone at the green.");
+
+            g = Group("Race start", ref y, 50);
+            g.Controls.Add(new Label { Left = 10, Top = 23, Width = 330, Text = "Pace laps before the green (1 = the game's own):" });
+            startPaceBox = new NumericUpDown { Left = 345, Top = 20, Width = 60, Minimum = 1, Maximum = 10, Value = 1 };
+            tips.SetToolTip(startPaceBox, "NR2003 always gives one pace lap before the start. More than 1: RaceControl keeps the game's\n" +
+                "delayed green going until the field has run this many pace laps, then one to go and the green as usual.\n" +
+                "If the game counts those laps toward the race, they are added back to the race length at the green.");
+            g.Controls.Add(startPaceBox);
+            startPaceBox.ValueChanged += (s, e) => { if (loading) return; settings["StartPaceLaps"] = ((int)startPaceBox.Value).ToString(); SaveSettings(); ApplyOptions(); };
 
             g = Group("Choose cone board", ref y, 84);
             Check(g, "ShowConeBoard", "Show the board as the cars choose", 10, 22, true,
@@ -603,7 +622,29 @@ namespace RaceControl
                 "In its own qualifying session NR2003 gives every AI car a small speed bonus from its qualifying rating\n" +
                 "(papy_ai.ini driver_qualifying_to_*). Practice doesn't, so with this on the cars get that bonus while\n" +
                 "they are out on a qualifying run - their laps match what they'd do in qualifying.");
-            g = Group("Qualifying fuel and pace", ref y, 74);
+            g = Group("Telemetry", ref y, 80);
+            Check(g, "RealWheel", "In-car steering wheel and arms follow the real steering", 10, 48, true,
+                "NR2003 turns a car's in-car steering wheel (and the driver's arms) from how fast the car is turning, times\n" +
+                "your setup's steering ratio - cut to 7 when you aren't driving - so the AI wheels show the wrong amount and\n" +
+                "it changes with speed. With this on they turn by the car's actual front wheel steer times your setup's\n" +
+                "steering ratio, the same angle the telemetry strip shows. Your own car is left as the game draws it.");
+            Check(g, "ShowTeleStrip", "Show the telemetry strip over the game", 10, 22, false,
+                "A small TV style strip for the car on the timing box: its throttle (green) and brake (red) as running lines\n" +
+                "over the last few seconds, and a steering wheel that turns with the car (round wheel for NASCAR formats,\n" +
+                "formula wheel for Indy). The AI have no brake value of their own: the brake is worked out from how hard the car\n" +
+                "slows with the throttle off. In custom qualifying it follows the car on its run; in races and every other\n" +
+                "session it follows the car on TV. NR2003 must run windowed or borderless.");
+            var stripPlaceBtn = new Button { Text = "Place the strip", Left = 280, Top = 18, Width = 120, Height = 26 };
+            tips.SetToolTip(stripPlaceBtn, "Drag it where you want it, the mouse wheel sizes it, Enter or double-click saves, Esc cancels.");
+            stripPlaceBtn.Click += (s, e) => PlaceStrip();
+            g.Controls.Add(stripPlaceBtn);
+            var teleWinBtn = new Button { Text = "Telemetry window...", Left = 420, Top = 18, Width = 146, Height = 26 };
+            tips.SetToolTip(teleWinBtn, "SMT style traces: tick drivers to follow their lap live, tick any of their timed laps (or their best) to\n" +
+                "lay them over each other - speed, throttle, brake, steering and the time gained or lost round the lap.\n" +
+                "Laps are recorded while qualifying runs, for every car in it.");
+            teleWinBtn.Click += (s, e) => OpenTelemetry();
+            g.Controls.Add(teleWinBtn);
+            g = Group("Qualifying fuel and pace", ref y, 100);
             g.Controls.Add(new Label { Left = 10, Top = 22, Width = 330, Text = "Fuel load for a qualifying run (% of the tank, 0 = leave it):" });
             qualFuelBox = new NumericUpDown { Left = 345, Top = 19, Width = 55, Minimum = 0, Maximum = 100, Value = 25 };
             tips.SetToolTip(qualFuelBox, "In practice the AI carry a race fuel load; in qualifying they run light. Each car gets this much fuel as it rolls off. Race Control logs its fuel before and after.");
@@ -612,6 +653,11 @@ namespace RaceControl
             Check(g, "QualMatchPace", "Match the stock qualifying pace (times scaled, order unchanged)", 10, 46, true,
                 "In the qualifying session the practice laps are scaled by the median of (the game's own qualifying lap /\n" +
                 "that car's practice lap), so the times look like stock qualifying times. The order stays as qualified.");
+            g.Controls.Add(new Label { Left = 10, Top = 76, Width = 330, Text = "Qualifying boost strength (% of the game's bonus, 100 = stock formula):" });
+            qualBoostBox = new NumericUpDown { Left = 345, Top = 73, Width = 55, Minimum = 0, Maximum = 1000, Value = 100 };
+            tips.SetToolTip(qualBoostBox, "Scales how much of the game's qualifying speed bonus the AI cars get while out on a run: 1 + (rating - 1) x coefficient x this %. Raise it if the laps are still slower than stock qualifying; the log line 'rating ..., multipliers ...' shows what each car got.");
+            qualBoostBox.ValueChanged += (s2, e2) => { if (loading) return; settings["QualBoost"] = qualBoostBox.Value.ToString(); SaveSettings(); qual.BoostPercent = (double)qualBoostBox.Value; };
+            g.Controls.Add(qualBoostBox);
             g = Group("Your car", ref y, 98);
             Check(g, "QualPlayer", "Include my car in qualifying (I drive my own turn)", 10, 22, true,
                 "Your car gets a turn in the single car order (or runs in the knockout / Indy rounds) like an AI car.\n" +
@@ -707,6 +753,15 @@ namespace RaceControl
             tick.Tick += (s, e) =>
             {
                 if (engine == null) return;
+                // AI telemetry: samples itself at most ~30 times a game second (Telemetry.cs)
+                if (qual.LiveOn && mem != null)
+                    try { tele.Sample(mem, qual.Timing, qual.Field.ToList()); }
+                    catch (GameMemoryException) { }
+                else if (mem != null && StripWanted)
+                    try { int tv = QualTiming.Focus(mem); if (QCar(tv)) tvTele.Sample(mem, noTiming, new[] { tv }); }
+                    catch (GameMemoryException) { }
+                try { TeleStripTick(); }                                   // ~25 frames a second
+                catch (GameMemoryException) { }
                 if ((DateTime.Now - lastQualTick).TotalMilliseconds >= 100)
                 {
                     lastQualTick = DateTime.Now;
@@ -795,6 +850,7 @@ namespace RaceControl
             string bl;
             boardLayout = BoardLayout.Parse(settings.TryGetValue("Board", out bl) ? bl : null);
             qualBoxLayout = BoardLayout.Parse(settings.TryGetValue("QualBox", out bl) ? bl : null);
+            stripLayout = BoardLayout.Parse(settings.TryGetValue("TeleStrip", out bl) ? bl : null);
             bannerLayout = BoardLayout.Parse(settings.TryGetValue("PlayerBanner", out bl) ? bl : null);
             ShowBoardLayout();
             qualFormatBox.SelectedIndex = !settings.TryGetValue("QualFormat", out sv) ? 0 : sv == "knockout" ? 2 : sv == "single" ? 1 : 0;
@@ -807,6 +863,7 @@ namespace RaceControl
                 qualIndySplitBox.SelectedIndex = ir.Length > 5 && ir[5] == "list" ? 1 : ir.Length > 5 && ir[5] == "random" ? 2 : 0;
                 set(qualIndyBreak, at(6, 60));
             }
+            startPaceBox.Value = settings.TryGetValue("StartPaceLaps", out sv) && int.TryParse(sv, out sc) ? Math.Max(1, Math.Min(10, sc)) : 1;
             qualIndyLapsBox.Value = settings.TryGetValue("QualIndyLaps", out sv) && int.TryParse(sv, out sc) ? Math.Max(1, Math.Min(10, sc)) : 4;
             {   // "on (1/0), minutes, runs per car, AI wave-offs (1/0)"
                 string[] rq = (settings.TryGetValue("QualReQual", out sv) ? sv : "").Split(',');
@@ -830,6 +887,7 @@ namespace RaceControl
             qualRoundsBox.Text = settings.TryGetValue("QualRounds", out sv) && sv != "" ? sv : "25:24, 10:12, 5:12";
             RoundRowsFromText();
             qualFuelBox.Value = settings.TryGetValue("QualFuel", out sv) && int.TryParse(sv, out sc) ? Math.Max(0, Math.Min(100, sc)) : 25;
+            qualBoostBox.Value = settings.TryGetValue("QualBoost", out sv) && int.TryParse(sv, out sc) ? Math.Max(0, Math.Min(1000, sc)) : 100;
             orderOrder = qualOrderBox.Text.Split(new[] { ',', ' ', ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.TrimStart('#')).ToList();
             ShowOrderList();
             qualBreakBox.Value = settings.TryGetValue("QualBreak", out sv) && int.TryParse(sv, out sc) ? Math.Max(0, Math.Min(600, sc)) : 60;
@@ -931,6 +989,7 @@ namespace RaceControl
             qualReQualMin.Enabled = qualReQualRuns.Enabled = qualWaveOffBox.Enabled = qualReQualBox.Checked;
             qualStartersUnit.Enabled = qualScratchBox.Enabled = qualStartersBox.Value > 0;
             qual.FuelPercent = (double)qualFuelBox.Value;
+            qual.BoostPercent = (double)qualBoostBox.Value;
             qual.ReleaseMode = qualReleaseBox.SelectedIndex == 1 ? Qualifying.Release.Seconds : qualReleaseBox.SelectedIndex == 2 ? Qualifying.Release.LapPercent : qualReleaseBox.SelectedIndex == 3 ? Qualifying.Release.Gap : Qualifying.Release.PitRoad;
             qual.MaxOut = (int)qualMaxOutBox.Value;
             qual.ReleaseValue = (double)qualReleaseVal.Value;
@@ -1039,6 +1098,18 @@ namespace RaceControl
             if (checks.ContainsKey("QualMatchPace")) qual.MatchStockPace = checks["QualMatchPace"].Checked;
             if (checks.ContainsKey("QualPlayer")) qual.IncludePlayer = checks["QualPlayer"].Checked;
             if (checks.ContainsKey("QualReadyPause")) qual.PlayerReadyPause = checks["QualReadyPause"].Checked;
+            if (mem != null && checks.ContainsKey("RealWheel"))
+            {
+                bool want = checks["RealWheel"].Checked;
+                if (want != wheelPatched || mem.Process.Id != wheelPid)
+                {
+                    bool? r = null;
+                    try { r = WheelAnim.Set(mem, want); } catch (GameMemoryException) { }
+                    wheelPid = mem.Process.Id; wheelPatched = r == true;
+                    if (r == null) Show(Stamp + "steering wheel animation: this NR2003.exe isn't the one Race Control knows, left as it is");
+                    else if (want) Show(Stamp + "steering wheel animation: in-car wheels follow the real steering");
+                }
+            }
             if (engine == null) return;
             engine.RaceBack = checks["RaceBack"].Checked;
             engine.StageRaceBack = checks["StageRaceBack"].Checked;
@@ -1079,6 +1150,8 @@ namespace RaceControl
             engine.LeadLapHighPull = settings.TryGetValue("LeadLapHighPull", out v) && double.TryParse(v, System.Globalization.NumberStyles.Float,
                 System.Globalization.CultureInfo.InvariantCulture, out pull) ? Math.Max(0, Math.Min(3, pull)) : 1.0;
             engine.FreePassOn = checks["FreePass"].Checked;
+            engine.StartPaceLaps = (int)startPaceBox.Value;
+            engine.StartPaceAddLaps = !settings.TryGetValue("StartPaceAddLaps", out v) || v != "0";   // ini only
             engine.HoldOneToGoForPits = checks["HoldOneToGo"].Checked;
             engine.HoldGreenIfSplit = checks["HoldGreenIfSplit"].Checked;
             engine.PaceCarWaits = checks["PaceCarWaits"].Checked;
@@ -1701,9 +1774,77 @@ namespace RaceControl
             qualBox.Invalidate();
         }
 
+        // the car the broadcast overlay and the telemetry strip follow: the car on its run (single car runs; the car on
+        // TV if that one is on a timed lap) or the car on TV (knockout)
+        int BoxCar()
+        {
+            int tv = QualTiming.Focus(mem);
+            int car = qual.SingleRuns ? qual.BoxCar : tv;
+            if (qual.SingleRuns && qual.BoxKind != Qualifying.BoxShow.Result && QCar(tv) && tv != car && qual.OnTimedLap(tv)) car = tv;
+            return car;
+        }
+
+        // the in-game telemetry strip (TeleStrip.cs): the box car's throttle and brake lines and its steering wheel
+        bool StripWanted { get { return checks.ContainsKey("ShowTeleStrip") && checks["ShowTeleStrip"].Checked; } }
+
+        void TeleStripTick()
+        {
+            bool placing = stripPlacing != null && !stripPlacing.IsDisposed;
+            bool want = StripWanted && mem != null && !placing;
+            if (teleStrip != null && (teleStrip.IsDisposed || teleStrip.Finished)) teleStrip = null;
+            if (!want) { if (teleStrip != null) { teleStrip.Finish(); teleStrip = null; } return; }
+            if ((DateTime.Now - stripAt).TotalMilliseconds < 40) return;
+            stripAt = DateTime.Now;
+            if (teleStrip == null)
+            {
+                try { teleStrip = new TeleStripForm(GameArea, stripLayout); teleStrip.Show(); }
+                catch (Exception ex) { Show(Stamp + "telemetry strip: " + ex.Message); teleStrip = null; return; }
+            }
+            var rec = qual.LiveOn ? tele : tvTele;
+            int car = qual.LiveOn ? BoxCar() : QualTiming.Focus(mem);
+            var d = new TeleStripData { Indy = qual.IndyFormat, Now = rec.Now };
+            var tc = QCar(car) ? rec.Of(car) : null;
+            if (tc != null && tc.HaveNow && qual.HasMemory)
+            {
+                d.Have = true; d.Num = qual.CarNumber(car); d.Last = qual.LastName(car);
+                d.Thr = tc.Now.Thr; d.Brk = tc.Now.Brk; d.Steer = tc.Now.Steer;
+                d.Recent.AddRange(tc.Recent);
+            }
+            teleStrip.Data = d; teleStrip.Invalidate();
+        }
+
+        void PlaceStrip()
+        {
+            if (stripPlacing != null && !stripPlacing.IsDisposed) { stripPlacing.Activate(); return; }
+            if (teleStrip != null) { teleStrip.Finish(); teleStrip = null; }
+            stripPlacing = new TeleStripForm(GameArea, stripLayout, true);
+            stripPlacing.Saved += l =>
+            {
+                stripLayout = l; settings["TeleStrip"] = l.ToString(); SaveSettings();
+                Show(Stamp + "telemetry strip placed, size " + Math.Round(l.Scale * 100) + "%");
+            };
+            stripPlacing.FormClosed += (s, e) => { stripPlacing = null; };
+            stripPlacing.Show();
+            stripPlacing.Activate();
+        }
+
+        void OpenTelemetry()
+        {
+            if (teleWin != null && !teleWin.IsDisposed) { teleWin.Show(); teleWin.Activate(); if (teleWin.WindowState == FormWindowState.Minimized) teleWin.WindowState = FormWindowState.Normal; return; }
+            Func<int, string> name = c =>
+            {
+                try { return mem != null ? "#" + Qualifying.Label(qual.CarNumber(c)) + "  " + qual.LastName(c) : "slot " + c; }
+                catch (GameMemoryException) { return "slot " + c; }
+            };
+            Func<int, int> num = c => { try { return mem != null ? qual.CarNumber(c) : c; } catch (GameMemoryException) { return c; } };
+            teleWin = new TelemetryWindow(tele, name, num, Icon);
+            teleWin.Show();
+        }
+
         // The broadcast overlay's data: the same car the classic box follows (single car runs) or the car on TV (knockout).
-        // Telemetry from the car's record (0xC12030 + slot * 5560: +0x1578 mph, +0x1508 rpm, +0x1510 throttle - RaceVision's
-        // addresses) and its gear (car block +6390, minus 1). The brake isn't mapped yet: shown as "--".
+        // Telemetry: speed from the car block's velocity, rpm from the car record (0xC12030 + slot * 5560, +0x1508), the
+        // throttle pedal and gear from the block's driver inputs (+6398, +6390 minus 1), and the brake worked out from the
+        // car's slowing (the telemetry recorder, Telemetry.cs - the AI have no brake value of their own).
         QualBroadcastData BroadcastNow()
         {
             var inv = System.Globalization.CultureInfo.InvariantCulture;
@@ -1711,9 +1852,7 @@ namespace RaceControl
             var d = new QualBroadcastData { LapsTotal = qual.Laps };
             string tn = mem.Str(Addr.TrackName, 64).Trim();
             d.Track = (tn.Contains('_') ? tn.Substring(0, tn.IndexOf('_')) : tn).ToUpperInvariant();
-            int tv = QualTiming.Focus(mem);
-            int car = qual.SingleRuns ? qual.BoxCar : tv;
-            if (qual.SingleRuns && qual.BoxKind != Qualifying.BoxShow.Result && QCar(tv) && tv != car && qual.OnTimedLap(tv)) car = tv;
+            int car = BoxCar();
             var b = qual.LiveBoard;
             int pole = b.Count > 0 ? b[0].Item1 : -1, poleMs = b.Count > 0 ? b[0].Item2 : 0;
             // the running order, as RaceControl has it: ranked as cars finish (pole first), the car on its run (colour
@@ -1744,24 +1883,20 @@ namespace RaceControl
             d.ShowOrder = !live || DateTime.Now < orderUntil;
             if (!QCar(car)) return d;
             d.Num = qual.CarNumber(car); d.First = qual.FirstName(car); d.Last = qual.LastName(car);
-            // telemetry: speed from the car's own velocity (the record's speed field read ~30 % high); throttle and brake
-            // from the car record (+0x1510, +0x1514), shown against the highest seen for the car - the AI's flat out
-            // reads 0.869
+            // telemetry: speed from the car's own velocity (the record's speed field read ~30 % high)
             long rec = 0xC12030 + car * 5560L, blk = 0xACCA30 + car * (long)Addr.Ocd;
             double vx = mem.F32(blk + 6634), vy = mem.F32(blk + 6638);
             d.Mph = (float)(Math.Sqrt(vx * vx + vy * vy) * 2.2369363);
             d.Rpm = mem.F32(rec + 0x1508);
-            // throttle: the pedal byte at record +0x604 (0-255; found live at St Petersburg - the float at +0x1510 tracked
-            // it but topped out at 0.68-0.87). Brake: the byte after it (+0x605) rises in the braking zones but isn't a
-            // clean pedal (it reads a little under throttle too), so it is shown only while the throttle is mostly off,
-            // against the highest seen for the car - an approximation.
-            float thr = mem.U8(rec + 0x604) / 255f, brk = mem.U8(rec + 0x605);
-            float thrTop; thrPeak.TryGetValue(car, out thrTop);
-            if (thr > thrTop) thrPeak[car] = thrTop = thr;
-            d.Throttle = Math.Max(0, Math.Min(1, thr / Math.Max(0.85f, thrTop)));
-            float brkTop; brkPeak.TryGetValue(car, out brkTop);
-            if (brk > brkTop) brkPeak[car] = brkTop = brk;
-            d.Brake = d.Throttle >= 0.5f ? 0 : Math.Max(0, Math.Min(1, (brk - 4) / Math.Max(16f, brkTop - 4)));
+            // throttle: the pedal in the car block's driver inputs (+6390 gear, +6394 brake slot, +6398 throttle, +6402
+            // rpm). Mapped live 2026-11-13 at Indy and Coronado: 1.0 flat out, 0.41 on the pit road limiter, 0 under
+            // braking. (The old source, record +0x604, is the top byte of a bit-packed state word with 3 bits of a frame
+            // counter in it; +0x605 after it is steering, not brake.)
+            float thr = mem.F32(blk + 6398);
+            d.Throttle = float.IsNaN(thr) ? 0 : Math.Max(0, Math.Min(1, thr));
+            var tc = tele.Of(car);
+            if (tc != null && tc.HaveNow) d.Throttle = tc.Now.Thr;        // the recorder's (lightly smoothed, Telemetry.cs)
+            d.Brake = tc != null && tc.HaveNow ? tc.Now.Brk : -1;          // from the telemetry recorder (Telemetry.cs)
             int gb = mem.U8(blk + 6390);
             d.Gear = gb <= 10 ? gb - 1 : 0;
             d.Tele = d.Mph >= 0 && d.Mph < 400 && d.Rpm >= 0 && d.Rpm < 30000;

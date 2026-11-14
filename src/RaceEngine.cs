@@ -131,11 +131,14 @@ namespace RaceControl
                 if (!string.IsNullOrEmpty(TrackName) && t != TrackName) NewTrack(TrackName, t);
                 TrackName = t;
             }
-            if (sim == 2 && race && laps == -1)
+            // before the green: the initial pace lap, and any more Race Control asked for (the game may count those
+            // as laps complete; still the start, not a caution)
+            if (sim == 2 && race && (laps == -1 || (startPacing && m.U8(Addr.FlagState) != 7)))
             {
                 lap = 0;
                 flag = m.U8(Addr.FlagState);
                 maxIdx = Math.Min(m.I32(Addr.NumCars), 64) - 1;
+                StartPaceTick(laps);
                 PreStartTick();
                 ManageCollisions();          // pit road starts: cars leaving their stalls pass through each other
                 return false;
@@ -145,12 +148,18 @@ namespace RaceControl
             // (with GhostOnPitRoad off this still runs: a car ghosted before it was switched off gets its contact back)
             if (sim == 2 && !race)
             {
+                if (startPaceLap0 != int.MinValue) ResetStartPace();
                 flag = 7;                    // nothing paces outside a race
                 maxIdx = Math.Min(m.I32(Addr.NumCars), 64) - 1;
                 ManageCollisions();
                 return false;
             }
             if (laps != -1) startFlagsSeen.Clear();
+            if (sim == 2 && race && laps != -1 && startPaceLap0 != int.MinValue && m.U8(Addr.FlagState) == 7)
+            {
+                StartPaceGreen(laps);
+                ResetStartPace();            // ready for the next race
+            }
             if (sim != 2 || !race || laps == -1) return false;
             lap = laps + 1;
             flag = m.U8(Addr.FlagState);
